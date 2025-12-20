@@ -42,14 +42,7 @@ export const LightCard = ({ name, initialState = false, delay = 0 }: LightCardPr
       >
         {name}
       </span>
-      <span
-        className={cn(
-          "text-[10px] uppercase tracking-wider font-semibold",
-          isOn ? "text-primary" : "text-muted-foreground"
-        )}
-      >
-        {isOn ? "Be" : "Ki"}
-      </span>
+
     </button>
   );
 };

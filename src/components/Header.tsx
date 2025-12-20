@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Thermometer, Home, Settings } from "lucide-react";
+import { Thermometer, Home } from "lucide-react";
 
 export const Header = () => {
   const [time, setTime] = useState(new Date());
@@ -32,9 +32,6 @@ export const Header = () => {
             </span>
           </div>
 
-          <button className="p-2 rounded-xl bg-secondary hover:bg-muted transition-colors text-muted-foreground hover:text-foreground">
-            <Settings className="w-4 h-4" />
-          </button>
         </div>
       </div>
 
