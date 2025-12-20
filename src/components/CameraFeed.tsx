@@ -1,6 +1,5 @@
 import { Camera, Maximize2, Volume2, VolumeX } from "lucide-react";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 
 interface CameraFeedProps {
   name: string;
@@ -13,32 +12,32 @@ export const CameraFeed = ({ name, feedUrl }: CameraFeedProps) => {
 
   return (
     <div 
-      className="glass-card overflow-hidden animate-fade-in col-span-full"
+      className="glass-card overflow-hidden animate-fade-in"
       style={{ animationDelay: "300ms" }}
     >
-      <div className="flex items-center justify-between p-4 border-b border-border">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-primary/20 text-primary">
-            <Camera className="w-5 h-5" />
+      <div className="flex items-center justify-between p-3 border-b border-border">
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 rounded-lg bg-primary/20 text-primary">
+            <Camera className="w-4 h-4" />
           </div>
-          <span className="font-medium text-lg">{name}</span>
-          <span className="flex items-center gap-1.5 text-xs text-success">
-            <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
-            Live
+          <span className="font-medium text-sm">{name}</span>
+          <span className="flex items-center gap-1 text-[10px] text-success">
+            <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+            Élő
           </span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <button
             onClick={() => setIsMuted(!isMuted)}
-            className="p-2 rounded-xl bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground transition-all"
+            className="p-1.5 rounded-lg bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground transition-all"
           >
-            {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+            {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
           </button>
           <button
             onClick={() => setIsFullscreen(!isFullscreen)}
-            className="p-2 rounded-xl bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground transition-all"
+            className="p-1.5 rounded-lg bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground transition-all"
           >
-            <Maximize2 className="w-4 h-4" />
+            <Maximize2 className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
@@ -51,13 +50,13 @@ export const CameraFeed = ({ name, feedUrl }: CameraFeedProps) => {
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="flex flex-col items-center gap-4 text-muted-foreground">
-              <Camera className="w-16 h-16 opacity-30" />
-              <span className="text-sm">Camera feed placeholder</span>
+            <div className="flex flex-col items-center gap-3 text-muted-foreground">
+              <Camera className="w-12 h-12 opacity-30" />
+              <span className="text-xs">Kamera előnézet</span>
             </div>
           </div>
         )}
-        <div className="absolute bottom-4 right-4 px-3 py-1.5 rounded-lg bg-background/80 backdrop-blur text-xs text-muted-foreground">
+        <div className="absolute bottom-2 right-2 px-2 py-1 rounded-md bg-background/80 backdrop-blur text-[10px] text-muted-foreground font-mono">
           {new Date().toLocaleString('hu-HU')}
         </div>
       </div>

@@ -25,15 +25,15 @@ export const GateCard = ({ name, initialState = "closed" }: GateCardProps) => {
       onClick={handleToggle}
       disabled={isMoving}
       className={cn(
-        "glass-card p-6 flex items-center gap-6 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer group animate-fade-in col-span-full",
-        isOpen && "border-success/50",
+        "glass-card p-4 flex items-center gap-4 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] cursor-pointer group animate-fade-in w-full",
+        isOpen && "border-success/50 glow-accent",
         isMoving && "border-warning/50"
       )}
       style={{ animationDelay: "250ms" }}
     >
       <div
         className={cn(
-          "p-4 rounded-2xl transition-all duration-300",
+          "p-3 rounded-xl transition-all duration-300",
           isOpen
             ? "bg-success/20 text-success"
             : isMoving
@@ -42,22 +42,22 @@ export const GateCard = ({ name, initialState = "closed" }: GateCardProps) => {
         )}
       >
         {isMoving ? (
-          <Loader2 className="w-8 h-8 animate-spin" />
+          <Loader2 className="w-6 h-6 animate-spin" />
         ) : isOpen ? (
-          <DoorOpen className="w-8 h-8" />
+          <DoorOpen className="w-6 h-6" />
         ) : (
-          <DoorClosed className="w-8 h-8" />
+          <DoorClosed className="w-6 h-6" />
         )}
       </div>
-      <div className="flex flex-col items-start gap-1">
-        <span className="font-medium text-xl text-foreground">{name}</span>
+      <div className="flex flex-col items-start gap-0.5">
+        <span className="font-medium text-base text-foreground">{name}</span>
         <span
           className={cn(
-            "text-sm uppercase tracking-wider font-semibold",
+            "text-xs uppercase tracking-wider font-semibold",
             isOpen ? "text-success" : isMoving ? "text-warning" : "text-muted-foreground"
           )}
         >
-          {isMoving ? "Moving..." : isOpen ? "Open" : "Closed"}
+          {isMoving ? "Mozog..." : isOpen ? "Nyitva" : "Zárva"}
         </span>
       </div>
     </button>
