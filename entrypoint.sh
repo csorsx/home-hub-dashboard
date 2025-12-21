@@ -1,7 +1,4 @@
 #!/bin/sh
 
-# Substitute environment variables in nginx.conf
-envsubst '${REMOOTIO_IP}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
-
-# Start Nginx
+# Start Nginx (envsubst no longer needed)
 exec nginx -g "daemon off;"
