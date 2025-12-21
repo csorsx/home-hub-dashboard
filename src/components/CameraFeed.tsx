@@ -11,7 +11,7 @@ export const CameraFeed = ({ name, feedUrl }: CameraFeedProps) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   return (
-    <div 
+    <div
       className="glass-card overflow-hidden animate-fade-in"
       style={{ animationDelay: "300ms" }}
     >
@@ -43,10 +43,11 @@ export const CameraFeed = ({ name, feedUrl }: CameraFeedProps) => {
       </div>
       <div className="relative aspect-video bg-background/50">
         {feedUrl ? (
-          <img
+          <iframe
             src={feedUrl}
-            alt={`${name} camera feed`}
-            className="w-full h-full object-cover"
+            title={`${name} camera feed`}
+            className="w-full h-full border-0"
+            allow="autoplay"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">

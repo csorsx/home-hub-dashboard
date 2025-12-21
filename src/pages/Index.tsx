@@ -86,7 +86,7 @@ const Index = () => {
         {/* Camera Section */}
         <section>
           <SectionTitle icon={Video} title="Kamera" />
-          <CameraFeed name="Bejárat kamera" />
+          <CameraFeed name="Bejárat kamera" feedUrl="http://192.168.1.104:8889/cam1/" />
         </section>
       </div>
     </div>
