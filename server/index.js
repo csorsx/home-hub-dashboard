@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Configuration from environment
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const REMOOTIO_IP = process.env.REMOOTIO_IP || '192.168.1.204';
 const REMOOTIO_PORT = process.env.REMOOTIO_PORT || 8080;
 
