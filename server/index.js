@@ -3,6 +3,10 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { createServer } from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+// Load .env file for local development
+dotenv.config();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
