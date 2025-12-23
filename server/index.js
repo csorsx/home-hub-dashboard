@@ -98,7 +98,7 @@ wss.on('connection', (clientWs) => {
     });
 });
 
-server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log(`Remootio proxy endpoint: /api/remootio -> ws://${REMOOTIO_IP}:${REMOOTIO_PORT}`);
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Proxying /api/remootio to ws://${REMOOTIO_IP}:${REMOOTIO_PORT}`);
 });

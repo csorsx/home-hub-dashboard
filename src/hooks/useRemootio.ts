@@ -51,7 +51,7 @@ export const useRemootio = () => {
         websocketRef.current = ws;
 
         ws.onopen = () => {
-            console.log("Proxy WS Open");
+            console.log("WebSocket connected to proxy");
             setState(prev => ({ ...prev, connectionStatus: 'Proxy Connected' }));
         };
 
@@ -145,8 +145,8 @@ export const useRemootio = () => {
         };
 
         ws.onerror = (e: any) => {
-            console.error("WS Error", e);
-            setState(prev => ({ ...prev, connectionStatus: 'Error (Check Console)' }));
+            console.error("WebSocket error:", e);
+            setState(prev => ({ ...prev, connectionStatus: 'Connection Error' }));
         };
 
         ws.onclose = () => {
