@@ -42,19 +42,19 @@ const Index = () => {
 
   return (
     <div className="min-h-screen synthwave-bg relative overflow-hidden">
-      {/* Synthwave Grid */}
-      <div className="fixed inset-0 synthwave-grid opacity-50 pointer-events-none"
+      {/* Synthwave Grid - Desktop only */}
+      <div className="hidden md:block fixed inset-0 synthwave-grid opacity-50 pointer-events-none"
         style={{ perspective: '500px', transform: 'rotateX(60deg) translateY(50%)', transformOrigin: 'center top' }} />
 
-      {/* Synthwave Sun */}
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[400px] h-[400px] rounded-full synthwave-sun opacity-60 blur-sm pointer-events-none" />
+      {/* Synthwave Sun - Desktop only */}
+      <div className="hidden md:block fixed bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[400px] h-[400px] rounded-full synthwave-sun opacity-60 blur-sm pointer-events-none" />
 
-      {/* Horizontal scan lines */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.03]"
+      {/* Horizontal scan lines - Desktop only */}
+      <div className="hidden md:block fixed inset-0 pointer-events-none opacity-[0.03]"
         style={{ background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, hsl(320 100% 60%) 2px, hsl(320 100% 60%) 4px)' }} />
 
-      {/* Ambient glows */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+      {/* Ambient glows - Desktop only */}
+      <div className="hidden md:block fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-20 left-0 w-64 h-64 bg-primary/20 rounded-full blur-[100px]" />
         <div className="absolute top-1/2 right-0 w-48 h-48 bg-accent/20 rounded-full blur-[80px]" />
       </div>
