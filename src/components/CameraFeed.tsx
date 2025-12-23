@@ -7,7 +7,7 @@ interface CameraFeedProps {
 }
 
 export const CameraFeed = ({ name, feedUrl }: CameraFeedProps) => {
-  const [isStreamLoaded, setIsStreamLoaded] = useState(false);
+  const [isStreamLoaded, setIsStreamLoaded] = useState(true);
 
   return (
     <div
