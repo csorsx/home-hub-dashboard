@@ -44,7 +44,7 @@
 
     --card-glass: 270 40% 12% / 0.8;
     --card-border: 280 50% 30%;
-    
+
     --gradient-primary: linear-gradient(135deg, hsl(320 100% 60%), hsl(280 100% 50%));
     --gradient-accent: linear-gradient(135deg, hsl(180 100% 50%), hsl(200 100% 60%));
     --gradient-card: linear-gradient(145deg, hsl(270 40% 15%), hsl(270 40% 8%));
@@ -82,8 +82,15 @@
   }
 
   .glass-card {
-    @apply bg-card/80 backdrop-blur-xl border border-card-border rounded-xl;
+    @apply bg-card/90 border border-card-border rounded-xl;
     box-shadow: var(--shadow-card);
+  }
+
+  /* Glass blur effect - desktop only for performance */
+  @media (min-width: 768px) {
+    .glass-card {
+      @apply bg-card/80 backdrop-blur-xl;
+    }
   }
 
   .glow-effect {
@@ -105,16 +112,15 @@
   }
 
   .synthwave-bg {
-    background: 
-      linear-gradient(180deg, 
-        hsl(270 50% 5%) 0%, 
+    background:
+      linear-gradient(180deg,
+        hsl(270 50% 5%) 0%,
         hsl(280 60% 8%) 40%,
-        hsl(320 80% 15%) 100%
-      );
+        hsl(320 80% 15%) 100%);
   }
 
   .synthwave-grid {
-    background-image: 
+    background-image:
       linear-gradient(hsl(320 100% 60% / 0.1) 1px, transparent 1px),
       linear-gradient(90deg, hsl(320 100% 60% / 0.1) 1px, transparent 1px);
     background-size: 40px 40px;
@@ -122,12 +128,11 @@
   }
 
   .synthwave-sun {
-    background: linear-gradient(180deg, 
-      hsl(45 100% 60%) 0%, 
-      hsl(20 100% 55%) 30%,
-      hsl(340 100% 50%) 60%,
-      hsl(320 100% 40%) 100%
-    );
+    background: linear-gradient(180deg,
+        hsl(45 100% 60%) 0%,
+        hsl(20 100% 55%) 30%,
+        hsl(340 100% 50%) 60%,
+        hsl(320 100% 40%) 100%);
   }
 
   .animate-pulse-glow {
@@ -135,9 +140,12 @@
   }
 
   @keyframes pulse-glow {
-    0%, 100% {
+
+    0%,
+    100% {
       opacity: 1;
     }
+
     50% {
       opacity: 0.7;
     }
@@ -147,11 +155,23 @@
     animation: fade-in 0.4s ease-out forwards;
   }
 
+  /* Disable animations on mobile for performance */
+  @media (max-width: 767px) {
+
+    .animate-fade-in,
+    .animate-scale-in,
+    .animate-scan,
+    .animate-pulse {
+      animation: none !important;
+    }
+  }
+
   @keyframes fade-in {
     from {
       opacity: 0;
       transform: translateY(10px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -167,6 +187,7 @@
       opacity: 0;
       transform: scale(0.95);
     }
+
     to {
       opacity: 1;
       transform: scale(1);
@@ -178,9 +199,12 @@
   }
 
   @keyframes scan {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: translateY(0);
     }
+
     50% {
       transform: translateY(100%);
     }
