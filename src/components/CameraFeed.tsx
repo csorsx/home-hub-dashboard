@@ -19,6 +19,11 @@ export const CameraFeed = ({ name, feedUrl }: CameraFeedProps) => {
 
     const connectWebRTC = async () => {
       try {
+        // MediaMTX uses WHEP at baseUrl/whep
+        const whepUrl = feedUrl.endsWith('/')
+          ? `${feedUrl}whep`
+          : `${feedUrl}/whep`;
+
         // Create peer connection
         pc = new RTCPeerConnection({
           iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
@@ -35,11 +40,12 @@ export const CameraFeed = ({ name, feedUrl }: CameraFeedProps) => {
 
         // Create and send offer
         pc.addTransceiver('video', { direction: 'recvonly' });
+        pc.addTransceiver('audio', { direction: 'recvonly' });
         const offer = await pc.createOffer();
         await pc.setLocalDescription(offer);
 
-        // Send offer to signaling server (the stream URL is the WHEP endpoint)
-        const response = await fetch(feedUrl, {
+        // Send offer to MediaMTX WHEP endpoint
+        const response = await fetch(whepUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/sdp' },
           body: offer.sdp
