@@ -10,8 +10,8 @@ interface RemootioState {
 }
 
 // Build-time credentials (for encryption/decryption on frontend)
-const API_SECRET_KEY = import.meta.env.VITE_REMOOTIO_API_SECRET_KEY;
-const API_AUTH_KEY = import.meta.env.VITE_REMOOTIO_API_AUTH_KEY;
+const API_SECRET_KEY = import.meta.env.VITE_REMOOTIO_API_SECRET_KEY?.trim();
+const API_AUTH_KEY = import.meta.env.VITE_REMOOTIO_API_AUTH_KEY?.trim();
 
 export const useRemootio = () => {
     const [state, setState] = useState<RemootioState>({

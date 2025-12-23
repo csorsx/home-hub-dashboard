@@ -20,8 +20,16 @@ export function remootioApiDecryptEncrypedFrame(frame, ApiSecretKey, ApiAuthKey,
     var ApiAuthKeyWordArray = CryptoJS.enc.Hex.parse(ApiAuthKey); //Parse hexstring
 
     //Step 1 verify MAC
-    var mac = CryptoJS.HmacSHA256(JSON.stringify(frame.data), ApiAuthKeyWordArray);
+    const stringifiedData = JSON.stringify(frame.data);
+    var mac = CryptoJS.HmacSHA256(stringifiedData, ApiAuthKeyWordArray);
     var base64mac = CryptoJS.enc.Base64.stringify(mac);
+
+    console.log("MAC Debug:", {
+        stringifiedData,
+        authKeySample: ApiAuthKey.substring(0, 4) + "...",
+        calculatedMac: base64mac,
+        expectedMac: frame.mac
+    });
 
     var macMatches = true;
     if (base64mac != frame.mac) {
