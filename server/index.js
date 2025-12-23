@@ -26,6 +26,14 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', remootioIp: REMOOTIO_IP });
 });
 
+// Config endpoint for frontend to get keys at runtime
+app.get('/api/config', (req, res) => {
+    res.json({
+        REMOOTIO_API_SECRET_KEY: process.env.VITE_REMOOTIO_API_SECRET_KEY || process.env.REMOOTIO_API_SECRET_KEY,
+        REMOOTIO_API_AUTH_KEY: process.env.VITE_REMOOTIO_API_AUTH_KEY || process.env.REMOOTIO_API_AUTH_KEY,
+    });
+});
+
 // SPA fallback - Use middleware instead of app.get('*') to avoid path-to-regexp issues
 app.use((req, res) => {
     if (!req.path.startsWith('/api')) {
