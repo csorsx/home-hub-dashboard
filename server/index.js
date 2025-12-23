@@ -23,7 +23,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // SPA fallback
-app.get('*', (req, res) => {
+app.get('(.*)', (req, res) => {
     if (!req.path.startsWith('/api')) {
         res.sendFile(path.join(__dirname, '../dist/index.html'));
     }
