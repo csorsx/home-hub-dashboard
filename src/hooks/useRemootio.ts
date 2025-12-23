@@ -35,6 +35,11 @@ export const useRemootio = () => {
     };
 
     useEffect(() => {
+        console.log("Remootio Keys Check:", {
+            secretLength: API_SECRET_KEY?.length,
+            authLength: API_AUTH_KEY?.length
+        });
+
         if (!API_SECRET_KEY || !API_AUTH_KEY) {
             setState(prev => ({ ...prev, connectionStatus: 'Missing Credentials' }));
             return;
