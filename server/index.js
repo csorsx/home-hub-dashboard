@@ -1,0 +1,104 @@
+import express from 'express';
+import { WebSocketServer, WebSocket } from 'ws';
+import { createServer } from 'http';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Configuration from environment
+const PORT = process.env.PORT || 3000;
+const REMOOTIO_IP = process.env.REMOOTIO_IP || '192.168.1.204';
+const REMOOTIO_PORT = process.env.REMOOTIO_PORT || 8080;
+
+const app = express();
+const server = createServer(app);
+
+// Serve static files from dist folder
+app.use(express.static(path.join(__dirname, '../dist')));
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', remootioIp: REMOOTIO_IP });
+});
+
+// SPA fallback
+app.get('*', (req, res) => {
+    if (!req.path.startsWith('/api')) {
+        res.sendFile(path.join(__dirname, '../dist/index.html'));
+    }
+});
+
+// WebSocket server for frontend clients
+const wss = new WebSocketServer({ server, path: '/api/remootio' });
+
+wss.on('connection', (clientWs) => {
+    console.log('Frontend client connected');
+
+    // Connect to the actual Remootio device
+    const remootioUrl = `ws://${REMOOTIO_IP}:${REMOOTIO_PORT}`;
+    console.log('Connecting to Remootio:', remootioUrl);
+
+    let remootioWs = null;
+
+    try {
+        remootioWs = new WebSocket(remootioUrl);
+    } catch (err) {
+        console.error('Failed to create Remootio connection:', err);
+        clientWs.send(JSON.stringify({ type: 'PROXY_ERROR', message: 'Failed to connect to Remootio' }));
+        clientWs.close();
+        return;
+    }
+
+    remootioWs.on('open', () => {
+        console.log('Connected to Remootio device');
+        clientWs.send(JSON.stringify({ type: 'PROXY_CONNECTED' }));
+    });
+
+    remootioWs.on('message', (data) => {
+        // Relay message from Remootio to frontend
+        if (clientWs.readyState === WebSocket.OPEN) {
+            clientWs.send(data.toString());
+        }
+    });
+
+    remootioWs.on('error', (err) => {
+        console.error('Remootio WebSocket error:', err.message);
+        if (clientWs.readyState === WebSocket.OPEN) {
+            clientWs.send(JSON.stringify({ type: 'PROXY_ERROR', message: err.message }));
+        }
+    });
+
+    remootioWs.on('close', () => {
+        console.log('Remootio connection closed');
+        if (clientWs.readyState === WebSocket.OPEN) {
+            clientWs.close();
+        }
+    });
+
+    // Relay messages from frontend to Remootio
+    clientWs.on('message', (data) => {
+        if (remootioWs && remootioWs.readyState === WebSocket.OPEN) {
+            remootioWs.send(data.toString());
+        }
+    });
+
+    clientWs.on('close', () => {
+        console.log('Frontend client disconnected');
+        if (remootioWs) {
+            remootioWs.close();
+        }
+    });
+
+    clientWs.on('error', (err) => {
+        console.error('Client WebSocket error:', err.message);
+        if (remootioWs) {
+            remootioWs.close();
+        }
+    });
+});
+
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Remootio proxy endpoint: /api/remootio -> ws://${REMOOTIO_IP}:${REMOOTIO_PORT}`);
+});

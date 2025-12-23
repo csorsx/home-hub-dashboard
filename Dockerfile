@@ -14,15 +14,25 @@ COPY . .
 
 RUN npm run build
 
-# Production stage
-FROM nginx:alpine
+# Production stage - Node.js server (not Nginx)
+FROM node:20-alpine
 
-# Copy built files from builder
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-# Copy custom nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Install production dependencies for the server
+RUN npm init -y && npm install express ws
+
+# Copy built frontend
+COPY --from=builder /app/dist ./dist
+
+# Copy server code
+COPY server ./server
+
+# Environment variables for runtime
+ENV PORT=80
+ENV REMOOTIO_IP=192.168.1.204
+ENV REMOOTIO_PORT=8080
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", "server/index.js"]

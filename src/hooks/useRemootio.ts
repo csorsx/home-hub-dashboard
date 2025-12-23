@@ -9,7 +9,7 @@ interface RemootioState {
     connectionStatus: string;
 }
 
-const REMOOTIO_IP = import.meta.env.VITE_REMOOTIO_IP;
+// Build-time credentials (for encryption/decryption on frontend)
 const API_SECRET_KEY = import.meta.env.VITE_REMOOTIO_API_SECRET_KEY;
 const API_AUTH_KEY = import.meta.env.VITE_REMOOTIO_API_AUTH_KEY;
 
@@ -34,56 +34,54 @@ export const useRemootio = () => {
         }
     };
 
-    const sendEncryptedFrame = (ws: WebSocket, unencryptedPayload: any) => {
-        if (ws.readyState === WebSocket.OPEN && sessionKeyRef.current) {
-            const encryptedFrame = remootioApiConstructEncrypedFrame(
-                JSON.stringify(unencryptedPayload),
-                API_SECRET_KEY,
-                API_AUTH_KEY,
-                sessionKeyRef.current
-            );
-            ws.send(JSON.stringify(encryptedFrame));
-        } else {
-            console.warn("Cannot send encrypted frame: Not connected or no session key");
-        }
-    };
-
     useEffect(() => {
-        if (!REMOOTIO_IP || !API_SECRET_KEY || !API_AUTH_KEY) {
+        if (!API_SECRET_KEY || !API_AUTH_KEY) {
             setState(prev => ({ ...prev, connectionStatus: 'Missing Credentials' }));
             return;
         }
 
-        // Direct Connection Logic (Matching Demo)
-        // The demo uses raw IP input. We assume standard port 8080.
-        const bareIP = REMOOTIO_IP.replace(/^(ws:\/\/|wss:\/\/|http:\/\/|https:\/\/)/, '').replace(/\/$/, '').replace(/:8080$/, '');
-        const wsUrl = `ws://${bareIP}:8080`;
+        // Connect to backend proxy instead of direct to Remootio
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${protocol}//${window.location.host}/api/remootio`;
 
-        console.log("Connecting directly to:", wsUrl);
-        setState(prev => ({ ...prev, connectionStatus: `Conn: ${wsUrl}` }));
+        console.log("Connecting via proxy:", wsUrl);
+        setState(prev => ({ ...prev, connectionStatus: `Proxy: ${wsUrl}` }));
 
         const ws = new WebSocket(wsUrl);
         websocketRef.current = ws;
 
         ws.onopen = () => {
-            console.log("WS Open");
-            setState(prev => ({ ...prev, isConnected: true, connectionStatus: 'Connected' }));
-
-            // Demo Logic: Wait for frames, but we should start Auth
-            // The demo has a button "Send AUTH frame". We do it automatically.
-            sendFrame(ws, { type: 'AUTH' });
-
-            // Start Pips
-            if (pingIntervalRef.current) clearInterval(pingIntervalRef.current);
-            pingIntervalRef.current = setInterval(() => {
-                sendFrame(ws, { type: 'PING' });
-            }, 60000);
+            console.log("Proxy WS Open");
+            setState(prev => ({ ...prev, connectionStatus: 'Proxy Connected' }));
         };
 
         ws.onmessage = (event) => {
             try {
                 const msg = JSON.parse(event.data);
 
+                // Handle proxy-specific messages
+                if (msg.type === 'PROXY_CONNECTED') {
+                    console.log("Proxy connected to Remootio");
+                    setState(prev => ({ ...prev, isConnected: true, connectionStatus: 'Connected to Remootio' }));
+
+                    // Start authentication
+                    sendFrame(ws, { type: 'AUTH' });
+
+                    // Start pings
+                    if (pingIntervalRef.current) clearInterval(pingIntervalRef.current);
+                    pingIntervalRef.current = setInterval(() => {
+                        sendFrame(ws, { type: 'PING' });
+                    }, 60000);
+                    return;
+                }
+
+                if (msg.type === 'PROXY_ERROR') {
+                    console.error("Proxy error:", msg.message);
+                    setState(prev => ({ ...prev, connectionStatus: `Proxy Error: ${msg.message}` }));
+                    return;
+                }
+
+                // Handle Remootio messages
                 if (msg.type === 'ENCRYPTED') {
                     const decrypted = remootioApiDecryptEncrypedFrame(
                         msg,
@@ -93,7 +91,7 @@ export const useRemootio = () => {
                     );
 
                     if (decrypted) {
-                        // Logic from demo: Handle Challenge
+                        // Handle Challenge
                         if (decrypted.challenge && decrypted.challenge.sessionKey && decrypted.challenge.initialActionId !== undefined) {
                             console.log("Auth Challenge Received");
                             sessionKeyRef.current = decrypted.challenge.sessionKey;
@@ -101,7 +99,7 @@ export const useRemootio = () => {
 
                             setState(prev => ({ ...prev, connectionStatus: 'Auth Challenge...' }));
 
-                            // Send Query to finish Auth (as per demo confirm dialog)
+                            // Send Query to finish Auth
                             if (lastActionIdRef.current !== undefined) {
                                 const qAction = {
                                     action: {
@@ -109,8 +107,6 @@ export const useRemootio = () => {
                                         id: (lastActionIdRef.current + 1) % 0x7fffffff
                                     }
                                 };
-                                // We don't have a helper for sending encrypted action yet easily accessible
-                                // Re-implement locally
                                 const encFrame = remootioApiConstructEncrypedFrame(
                                     JSON.stringify(qAction),
                                     API_SECRET_KEY,
@@ -121,7 +117,7 @@ export const useRemootio = () => {
                             }
                         }
 
-                        // Logic from demo: Update ActionID
+                        // Update ActionID
                         if (decrypted.response && decrypted.response.id !== undefined) {
                             lastActionIdRef.current = decrypted.response.id;
 
@@ -130,12 +126,11 @@ export const useRemootio = () => {
                                 const isOpen = decrypted.response.sensorStatus === 'open';
                                 setState(prev => ({
                                     ...prev,
-                                    isAuthenticated: true, // If we got a response, we are good
+                                    isAuthenticated: true,
                                     gateStatus: isOpen ? 'open' : 'closed',
                                     connectionStatus: 'Ready'
                                 }));
                             } else if (decrypted.response.type === 'QUERY') {
-                                // Query response means we are authenticated
                                 setState(prev => ({ ...prev, isAuthenticated: true, connectionStatus: 'Authenticated' }));
                             }
                         }
