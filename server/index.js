@@ -22,10 +22,12 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', remootioIp: REMOOTIO_IP });
 });
 
-// SPA fallback
-app.get('(.*)', (req, res) => {
+// SPA fallback - Use middleware instead of app.get('*') to avoid path-to-regexp issues
+app.use((req, res) => {
     if (!req.path.startsWith('/api')) {
         res.sendFile(path.join(__dirname, '../dist/index.html'));
+    } else {
+        res.status(404).json({ error: 'API endpoint not found' });
     }
 });
 
