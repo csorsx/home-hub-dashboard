@@ -44,11 +44,11 @@ export const GateCard = ({ name }: GateCardProps) => {
         )}
       </div>
       <div className="flex flex-col items-start gap-0.5">
-        <span className="font-medium text-base text-foreground">{name}</span>
+        <span className="font-semibold text-lg text-foreground">{name}</span>
         <div className="flex items-center gap-2">
           <span
             className={cn(
-              "text-xs uppercase tracking-wider font-semibold",
+              "text-sm uppercase tracking-wider font-bold",
               isOpen ? "text-success" : "text-muted-foreground"
             )}
           >

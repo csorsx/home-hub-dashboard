@@ -48,7 +48,7 @@ export const Header = () => {
           <div className="p-1.5 rounded-lg bg-primary/20 text-primary glow-effect">
             <Home className="w-4 h-4" />
           </div>
-          <span className="text-base font-bold tracking-tight font-display text-gradient hidden xs:inline">
+          <span className="text-lg font-bold tracking-tight font-display text-gradient hidden xs:inline">
             Smart Home
           </span>
         </div>
@@ -57,13 +57,13 @@ export const Header = () => {
         <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-background/40 border border-white/5 mx-auto">
           <Clock className="w-3.5 h-3.5 text-primary/70" />
           <div className="flex items-baseline gap-1.5">
-            <span className="text-xl font-bold tabular-nums tracking-tight font-display text-gradient">
+            <span className="text-2xl font-bold tabular-nums tracking-tight font-display text-gradient">
               {time.toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' })}
-              <span className="text-sm opacity-50 ml-0.5">
+              <span className="text-base opacity-50 ml-0.5">
                 :{time.toLocaleTimeString('hu-HU', { second: '2-digit' })}
               </span>
             </span>
-            <span className="text-[10px] text-muted-foreground hidden sm:inline uppercase tracking-wider font-semibold">
+            <span className="text-xs text-muted-foreground hidden sm:inline uppercase tracking-wider font-semibold">
               {time.toLocaleDateString('hu-HU', { weekday: 'short', month: 'short', day: 'numeric' })}
             </span>
           </div>
@@ -71,10 +71,10 @@ export const Header = () => {
 
         {/* Right: Temp */}
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-secondary/80 border border-border">
-          <Thermometer className="w-4 h-4 text-accent" />
-          <span className="text-base font-semibold font-display">
+          <Thermometer className="w-5 h-5 text-accent" />
+          <span className="text-2xl font-semibold font-display">
             {temp !== null ? temp.toFixed(1) : "--.-"}
-            <span className="text-xs text-muted-foreground ml-0.5">°C</span>
+            <span className="text-sm text-muted-foreground ml-0.5">°C</span>
           </span>
         </div>
       </div>
