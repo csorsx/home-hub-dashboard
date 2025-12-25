@@ -14,8 +14,9 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Install production dependencies for the server
-RUN npm init -y && npm install express dotenv
+# Copy package config and install dependencies
+COPY package.json package-lock.json ./
+RUN npm install --omit=dev
 
 # Copy built frontend
 COPY --from=builder /app/dist ./dist
