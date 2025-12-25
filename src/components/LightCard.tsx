@@ -21,7 +21,7 @@ export const LightCard = ({ name, delay = 0, onToggle }: LightCardProps) => {
         <Lightbulb className="w-5 h-5" />
       </div>
 
-      <span className="font-semibold text-lg text-foreground">
+      <span className="font-semibold text-l text-foreground">
         {name}
       </span>
     </button>
