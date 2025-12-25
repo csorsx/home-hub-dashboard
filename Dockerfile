@@ -24,7 +24,7 @@ COPY --from=builder /app/dist ./dist
 # Copy server code
 COPY server ./server
 
-# Default environment variables for runtime (can be overridden in Portainer)
+# Default environment variables for runtime
 ENV PORT=80
 ENV REMOOTIO_IP=192.168.1.104
 ENV REMOOTIO_PORT=887
