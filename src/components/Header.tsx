@@ -54,17 +54,17 @@ export const Header = () => {
         </div>
 
         {/* Middle: Clock */}
-        <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-background/40 border border-white/5 mx-auto">
-          <Clock className="w-3.5 h-3.5 text-primary/70" />
-          <div className="flex items-baseline gap-1.5">
+        <div className="flex items-center gap-3 px-4 py-1 rounded-xl bg-background/40 border border-white/5 mx-auto">
+          <Clock className="w-4 h-4 text-primary/70" />
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-bold tracking-tight font-display text-gradient uppercase">
+              {time.toLocaleDateString('hu-HU', { weekday: 'short', month: 'short', day: 'numeric' })}
+            </span>
             <span className="text-2xl font-bold tabular-nums tracking-tight font-display text-gradient">
               {time.toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' })}
               <span className="text-base opacity-50 ml-0.5">
                 :{time.toLocaleTimeString('hu-HU', { second: '2-digit' })}
               </span>
-            </span>
-            <span className="text-xs text-muted-foreground hidden sm:inline uppercase tracking-wider font-semibold">
-              {time.toLocaleDateString('hu-HU', { weekday: 'short', month: 'short', day: 'numeric' })}
             </span>
           </div>
         </div>
