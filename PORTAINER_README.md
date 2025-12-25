@@ -19,9 +19,8 @@ If you prefer to run a single container instead of a stack, follow these steps:
    - **URL/Repository**: `https://github.com/csorsx/home-hub-dashboard.git`
    - **Dockerfile**: `Dockerfile` (default)
 4. **Build Arguments** (click "Add build argument"):
-   - `VITE_REMOOTIO_IP` = `192.168.1.204`
-   - `VITE_REMOOTIO_API_SECRET_KEY` = `<your-secret-key>`
-   - `VITE_REMOOTIO_API_AUTH_KEY` = `<your-auth-key>`
+   - `REMOOTIO_IP` = `192.168.1.104`
+   - `REMOOTIO_PORT` = `887`
 5. Click **Build the image**.
 
 ### 2. Create the Container

@@ -15,7 +15,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Install production dependencies for the server
-RUN npm init -y && npm install express ws dotenv
+RUN npm init -y && npm install express dotenv
 
 # Copy built frontend
 COPY --from=builder /app/dist ./dist
@@ -25,8 +25,8 @@ COPY server ./server
 
 # Default environment variables for runtime (can be overridden in Portainer)
 ENV PORT=80
-ENV REMOOTIO_IP=192.168.1.204
-ENV REMOOTIO_PORT=8080
+ENV REMOOTIO_IP=192.168.1.104
+ENV REMOOTIO_PORT=887
 
 EXPOSE 80
 
