@@ -56,7 +56,7 @@ export const GateCard = ({ name }: GateCardProps) => {
           </span>
 
           {/* Connection Indicator */}
-          <div className={cn("text-[10px] items-center gap-1 hidden sm:flex", isReady ? "text-green-500" : "text-red-500")}>
+          <div className={cn("text-[10px] items-center gap-1 flex", isReady ? "text-green-500" : "text-red-500")}>
             {isReady ? <Wifi className="w-3 h-3" /> : (
               <span className="flex items-center gap-1">
                 <WifiOff className="w-3 h-3" />

@@ -18,6 +18,12 @@ const REMOOTIO_PORT = process.env.REMOOTIO_PORT || 8080;
 const app = express();
 const server = createServer(app);
 
+// Simple logger
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.path} - ${req.ip}`);
+    next();
+});
+
 // Serve static files from dist folder
 app.use(express.static(path.join(__dirname, '../dist')));
 
